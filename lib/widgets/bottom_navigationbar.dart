@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:twitter_card_flutter/pages/_profile_page.dart';
 import 'package:twitter_card_flutter/pages/home.dart';
 
+
 class BottomNavigationbar extends StatefulWidget {
   const BottomNavigationbar({super.key});
 
@@ -12,7 +13,7 @@ class BottomNavigationbar extends StatefulWidget {
 class _BottomNavigationbarState extends State<BottomNavigationbar> {
   int selectedIndex = 0;
   final List pages = [
-    Center(child: Text("Home Page")),
+    HomePage(),
     Center(child: Text("Message Page")),
     Center(child: Text("Settings Page")),
     ProfilePage(),
@@ -32,13 +33,13 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
         type: BottomNavigationBarType.fixed,
         onTap: _navbottom_press,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.business,color: Colors.cyan), label: 'Project',),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Message'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.person,color: Colors.blue,), label: 'Profile'),
         ],
       ),
     );
