@@ -1,8 +1,10 @@
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:twitter_card_flutter/pages/detail_page_pokemon.dart';
-import 'dart:math';
+import 'package:twitter_card_flutter/provider/favorite_provider.dart';
 
 class Pokemonpractice extends StatefulWidget {
   const Pokemonpractice({super.key});
@@ -22,19 +24,17 @@ class _PokemonpracticeState extends State<Pokemonpractice> {
   }
 
   void morebtn(String url) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => DetailPagePokemon(url: url),
-    ),
-  );
-}
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DetailPagePokemon(url: url)),
+    );
+  }
+
+  void addtofavorite(item) {
+    context.read<FavoriteProvider>().addFavorite(item);
+  }
 
   Future<void> fetchPokemon() async {
-    //random number
-    // var number = Random();
-    // int randomId = number.nextInt(1000) + 1;
-
     final url = Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=20');
 
     final response = await http.get(url);
@@ -55,6 +55,7 @@ class _PokemonpracticeState extends State<Pokemonpractice> {
 
   @override
   Widget build(BuildContext context) {
+    final favoriteProvider = Provider.of<FavoriteProvider>(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Pokemon Viewer')),
       body: isLoading
@@ -86,6 +87,28 @@ class _PokemonpracticeState extends State<Pokemonpractice> {
                           children: [
                             Image.network(imageUrl, height: 80),
                             const SizedBox(height: 10),
+
+                            // Add to favorite button
+                            FavoriteButton(
+                              iconSize: 20,
+                              isFavorite: favoriteProvider.isFavorite(
+                                pokemon["name"],
+                              ),
+
+                              valueChanged: (isFavorite) {
+                                if (isFavorite) {
+                                  favoriteProvider.addFavorite({
+                                    "name": pokemon["name"],
+                                    "image": imageUrl,
+                                    "url": pokemon["url"],
+                                  });
+                                } else {
+                                  favoriteProvider.removeFavorite(
+                                    pokemon["name"],
+                                  );
+                                }
+                              },
+                            ),
                             Text(
                               pokemon['name'],
                               style: const TextStyle(

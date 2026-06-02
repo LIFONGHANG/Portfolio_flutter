@@ -100,3 +100,4 @@ class _DetailPagePokemonState extends State<DetailPagePokemon> {
     );
   }
 }
+
